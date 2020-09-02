@@ -33,7 +33,7 @@ server:
       enabled: false
   tomcat:
     max-threads: 100
-  port: 8080
+  port: 98080
   servlet:
     context-path: /portal
 ########################## SERVER SETTING END ##########################
