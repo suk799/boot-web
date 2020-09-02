@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Sample Notice Detail</title>
+<script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	fnDetail();
+});
+
+function fnDetail() {
+	var obj = new Object();
+	obj.seq = $("#seq").val();
+	
+	$.ajax({
+		type : "POST",
+		async : false,
+		contentType : "application/json",
+		data : JSON.stringify(obj),
+		dataType : "json",
+		url : "/portal/sample/sampleDetail",
+		success : function(data) {
+			$("#title").val(data.resultVo.title);
+			$("#content").text(data.resultVo.content);
+			$("#memberId").val(data.resultVo.memberid);
+		},
+		error : function(data) {
+			alert("문제가 발생하였습니다. 담당자에게 문의하여 주시기 바랍니다.");
+		}
+	});
+}
+
+function fnDelete() {
+	if (confirm("정말로 삭제하시겠습니까?")) {
+		var obj = new Object();
+		obj.seq = $("#seq").val();
+		
+		$.ajax({
+			type : "POST",
+			async : false,
+			contentType : "application/json",
+			data : JSON.stringify(obj),
+			dataType : "json",
+			url : "/portal/sample/removeSample",
+			success : function(data) {
+				alert(data.resultMsg);
+				window.location.href="/portal/sample/sampleList";
+			},
+			error : function(data) {
+				alert("문제가 발생하였습니다. 담당자에게 문의하여 주시기 바랍니다.");
+			}
+		});
+	}
+}
+
+function fnModify() {
+	var seq = $("#seq").val();
+	window.location.href="/portal/sample/sampleModify?seq="+seq;
+}
+
+function fnList() {
+	window.location.href="/portal/sample/sampleList";
+}
+</script>
+</head>
+<body>
+<input type="hidden" id="seq" th:value="${seq}" />
+<table id="noticeTbl">
+	<caption>샘플 게시판 상세</caption>
+	<colgroup>
+		<col style="width: 30%" />
+		<col style="width: 70%" />
+	</colgroup>
+	<tbody style="text-align: center;">
+		<tr>
+			<td>제목</td>
+			<td><input id="title" style="width:300px;" readonly="readonly" /></td>
+		</tr>
+		<tr>
+			<td>내용</td>
+			<td><textarea id="content" rows="10" cols="40" readonly="readonly"></textarea></td>
+		</tr>
+		<tr>
+			<td>등록자 아이디</td>
+			<td><input id="memberId" style="width:300px;" readonly="readonly" /></td>
+		</tr>
+	</tbody>
+</table>
+
+<button id="listBtn" onclick="javascript:fnList();">게시판 리스트</button>
+<button id="modifyBtn" onclick="javascript:fnModify();">게시판 수정</button>
+<button id="deleteBtn" onclick="javascript:fnDelete();">게시판  삭제</button>
+
+</body>
+</html>

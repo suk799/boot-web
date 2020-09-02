@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.datasolution.demo.sample.mapper.SampleMapper">
+
+	<select id="selectSampleList" parameterType="kr.datasolution.demo.sample.domain.SampleVo" resultType="kr.datasolution.demo.sample.domain.SampleVo">
+		SELECT SEQ
+		       , TITLE
+		       , CONTENT
+		       , MEMBERID
+		       , to_char(REGDT, 'YYYY-MM-DD HH24:MI:SS') as REGDT
+		FROM NOTICE
+		WHERE 1=1
+		<if test="searchTxt != null and !searchTxt.equals('')">
+			AND (TITLE like '%' || #{searchTxt} || '%' OR CONTENT like '%' || #{searchTxt} || '%')
+		</if>
+		ORDER BY REGDT DESC
+	</select>
+	
+	<select id="selectSampleDetail" parameterType="kr.datasolution.demo.sample.domain.SampleVo" resultType="kr.datasolution.demo.sample.domain.SampleVo">
+		SELECT SEQ
+		       , TITLE
+		       , CONTENT
+		       , MEMBERID
+		       , to_char(REGDT, 'YYYY-MM-DD HH24:MI:SS') as REGDT
+		FROM NOTICE
+		WHERE SEQ = #{seq}
+	</select>
+	
+	<insert id="insertSample" parameterType="kr.datasolution.demo.sample.domain.SampleVo">
+		<selectKey resultType="string" keyProperty="seq" order="BEFORE">
+			SELECT MAX(seq) + 1 FROM NOTICE
+		</selectKey>
+		INSERT INTO NOTICE (SEQ, TITLE, CONTENT, MEMBERID, REGDT)
+		VALUES(#{seq}, #{title}, #{content}, #{memberid}, sysdate)
+	</insert>
+	
+	<update id="updateSample" parameterType="kr.datasolution.demo.sample.domain.SampleVo">
+		UPDATE NOTICE
+		SET    TITLE = #{title}
+			   , CONTENT = #{content}
+		WHERE  SEQ = #{seq}
+	</update>
+	
+	<delete id="deleteSample" parameterType="kr.datasolution.demo.sample.domain.SampleVo">
+		DELETE FROM NOTICE
+		WHERE  SEQ = #{seq}
+	</delete>
+
+</mapper>

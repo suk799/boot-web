@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Sample List</title>
+<script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	fnList();
+});
+
+function fnList() {
+	var obj = new Object();
+	obj.searchTxt = $("#searchTxt").val();
+	
+	$.ajax({
+		type : "POST",
+		async : false,
+		contentType : "application/json",
+		data : JSON.stringify(obj),
+		dataType : "json",
+		url : "/portal/sample/sampleApiList",
+		success : function(data) {
+			//alert(data.resultMsg);
+			var rowData = "";
+			if (data.list != null && data.list.length > 0) {
+				var rstList;
+				for (var i=0;i<data.list.length;i++) {
+					rstList = data.list[i];
+					rowData += "<tr><td>"+rstList.seq+"</td><td><a href='javascript:fnDetail(\""+rstList.seq+"\")'>"+rstList.title+"</a></td><td>"+rstList.memberid+"</td><td>"+rstList.regdt+"</td></tr>";
+				}
+			} else {
+				var rowData = "<tr><td colspan='4'>내역이 존재하지 않습니다.</td></tr>";
+			}
+			$("#noticeTblTbody").html(rowData);
+		},
+		error : function(data) {
+			alert("문제가 발생하였습니다. 담당자에게 문의하여 주시기 바랍니다.");
+		}
+	});
+}
+
+function fnDetail(seq) {
+	window.location.href="/portal/sample/sampleDetail?seq="+seq;
+}
+
+function fnSearch() {
+	fnList();
+}
+
+function fnRegist() {
+	window.location.href="/portal/sample/sampleRegist";
+}
+</script>
+</head>
+
+<body>
+
+<table id="searchTbl">
+	<colgroup>
+		<col style="width: 20%" />
+		<col style="width: 50%" />
+		<col style="width: 20%" />
+	</colgroup>
+	<tbody style="text-align: center;">
+		<tr>
+			<td>검색</td>
+			<td><input type="text" id="searchTxt" value="" /></td>
+			<td><button id="searchBtn" onclick="javascript:fnSearch();">검색</button></td>
+		</tr>
+	</tbody>
+</table>
+
+<table id="noticeTbl">
+	<caption>샘플 게시판 리스트</caption>
+	<colgroup>
+		<col style="width: 10%" />
+		<col style="width: 40%" />
+		<col style="width: 25%" />
+		<col style="width: 25%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>SEQ</th>
+			<th>제목</th>
+			<th>사용자명</th>
+			<th>날짜</th>
+		</tr>
+	</thead>
+	<tbody id="noticeTblTbody" style="text-align: center;">
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="4">내역이 존재하지 않습니다.</td>
+		</tr>
+	</tbody>
+</table>
+<br/><br/>
+<button id="registBtn" onclick="javascript:fnRegist();">게시판 등록</button>
+</body>
+</html>

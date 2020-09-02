@@ -1,0 +1,79 @@
+###################### SPRING PROFILE SETTING START ######################
+spring:
+  application:
+    name: boot-web
+  output:
+    ansi:
+      enabled: always
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false
+    view-names: common/*,error/*,layout/*,login/*,main/*,sample/*
+  mvc:
+#    locale: en_US
+    locale: ko_KR
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  messages:
+    always-use-message-format: false
+    cacheseconds: -1
+    basename: i18n/message, i18n/error, i18n/validation
+    encoding: UTF-8
+  resources:
+    add-mappings: true
+
+###################### SPRING PROFILE SETTING END ########################
+########################## SERVER SETTING START ##########################
+server:
+  error:
+    whitelabel:
+      enabled: false
+  tomcat:
+    max-threads: 100
+  port: 8080
+  servlet:
+    context-path: /portal
+########################## SERVER SETTING END ##########################
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  executor-type: SIMPLE
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+    cache-enabled: false
+    default-executor-type: SIMPLE
+    use-generated-keys: true
+
+---
+spring:
+  profiles: local
+#  datasource:
+#    driver-class-name: oracle.jdbc.driver.OracleDriver
+#    url: jdbc:oracle:thin:@192.168.150.191:1521:ORCL
+#    username: scott
+#    password: tiger
+
+#app:
+#  datasource:
+#    portal:
+#      type: com.zaxxer.hikari.HikariDataSource
+#      url: jdbc:oracle:thin@192.168.150.191:1521:orcl
+#      driver-class-name: oracle.jdbc.OracleDriver
+#      username: scott
+#      password: tiger
+#      hikari:
+#        idle-timeout: 10000
+
+---
+spring:
+  profiles: development
+
+---
+spring:
+  profiles: production
+
