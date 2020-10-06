@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * TEST_1
+ * TEST_2
  */
 @Controller
 @RequestMapping(value = "/hello")
